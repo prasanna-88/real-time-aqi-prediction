@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AQI Predictor — Real-Time Air Quality &amp; Health Advisory</title>
+  <meta name="description"
+    content="Predict Air Quality Index in real-time using ML and receive personalized health recommendations powered by AI." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+
+<body>
+  <!-- Animated background particles -->
+  <div id="particles-bg" aria-hidden="true"></div>
+
+  <header id="app-header">
+    <div class="header-content">
+      <div class="logo">
+        <svg viewBox="0 0 40 40" width="40" height="40" aria-hidden="true">
+          <defs>
+            <linearGradient id="logo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#6366f1" />
+              <stop offset="100%" style="stop-color:#06b6d4" />
+            </linearGradient>
+          </defs>
+          <circle cx="20" cy="20" r="18" fill="url(#logo-grad)" opacity="0.15" />
+          <path d="M20 6 L20 34 M12 14 L20 6 L28 14 M10 20 H30 M12 26 L20 34 L28 26" stroke="url(#logo-grad)"
+            stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <h1>AQI Predictor</h1>
+      </div>
+      <p class="tagline">Real-Time Air Quality Intelligence &amp; Health Advisory</p>
+    </div>
+  </header>
+
+  <main id="app-main">
+    <!-- INPUT FORM SECTION -->
+    <section id="input-section" class="glass-card">
+      <h2>
+        <span class="section-icon">📊</span>
+        Environmental Data
+      </h2>
+      <form id="predict-form" autocomplete="off">
+        <div class="form-grid">
+          <!-- Pollutant inputs -->
+          <div class="input-group" id="group-pm25">
+            <label for="pm2_5">PM2.5 <span class="unit">(µg/m³)</span></label>
+            <input type="number" id="pm2_5" name="pm2_5" min="0" max="500" step="0.1" placeholder="e.g. 35" required />
+            <div class="input-bar pm25-bar"></div>
+          </div>
+
+          <div class="input-group" id="group-pm10">
+            <label for="pm10">PM10 <span class="unit">(µg/m³)</span></label>
+            <input type="number" id="pm10" name="pm10" min="0" max="1000" step="0.1" placeholder="e.g. 70" required />
+            <div class="input-bar pm10-bar"></div>
+          </div>
+
+          <div class="input-group" id="group-co">
+            <label for="co">CO <span class="unit">(mg/m³)</span></label>
+            <input type="number" id="co" name="co" min="0" max="50" step="0.01" placeholder="e.g. 2.5" required />
+            <div class="input-bar co-bar"></div>
+          </div>
+
+          <div class="input-group" id="group-no2">
+            <label for="no2">NO₂ <span class="unit">(µg/m³)</span></label>
+            <input type="number" id="no2" name="no2" min="0" max="500" step="0.1" placeholder="e.g. 40" required />
+            <div class="input-bar no2-bar"></div>
+          </div>
+
+          <div class="input-group" id="group-so2">
+            <label for="so2">SO₂ <span class="unit">(µg/m³)</span></label>
+            <input type="number" id="so2" name="so2" min="0" max="500" step="0.1" placeholder="e.g. 20" required />
+            <div class="input-bar so2-bar"></div>
+          </div>
+
+          <div class="input-group" id="group-o3">
+            <label for="o3">O₃ <span class="unit">(µg/m³)</span></label>
+            <input type="number" id="o3" name="o3" min="0" max="500" step="0.1" placeholder="e.g. 60" required />
+            <div class="input-bar o3-bar"></div>
+          </div>
+
+          <div class="input-group" id="group-temp">
+            <label for="temperature">Temperature <span class="unit">(°C)</span></label>
+            <input type="number" id="temperature" name="temperature" min="-50" max="60" step="0.1" placeholder="e.g. 28"
+              required />
+            <div class="input-bar temp-bar"></div>
+          </div>
+
+          <div class="input-group" id="group-hum">
+            <label for="humidity">Humidity <span class="unit">(%)</span></label>
+            <input type="number" id="humidity" name="humidity" min="0" max="100" step="0.1" placeholder="e.g. 65"
+              required />
+            <div class="input-bar hum-bar"></div>
+          </div>
+        </div>
+
+        <!-- User details (collapsible) -->
+        <details id="user-details-toggle" class="user-details">
+          <summary>👤 Add Personal Details <span class="optional-tag">Optional – for personalised advice</span>
+          </summary>
+          <div class="details-grid">
+            <div class="input-group">
+              <label for="age">Age</label>
+              <input type="number" id="age" name="age" min="0" max="120" placeholder="e.g. 30" />
+            </div>
+            <div class="input-group">
+              <label for="health_condition">Health Condition</label>
+              <select id="health_condition" name="health_condition">
+                <option value="none">None</option>
+                <option value="asthma">Asthma</option>
+                <option value="heart_disease">Heart Disease</option>
+                <option value="diabetes">Diabetes</option>
+                <option value="respiratory">Respiratory Issues</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="input-group">
+              <label for="activity">Activity Level</label>
+              <select id="activity" name="activity">
+                <option value="sedentary">Sedentary</option>
+                <option value="light">Light</option>
+                <option value="moderate" selected>Moderate</option>
+                <option value="vigorous">Vigorous</option>
+                <option value="outdoor_worker">Outdoor Worker</option>
+              </select>
+            </div>
+          </div>
+        </details>
+
+        <button type="submit" id="predict-btn" class="btn-primary">
+          <span class="btn-text">Predict AQI</span>
+          <span class="btn-loader" hidden>
+            <span class="spinner"></span> Analyzing…
+          </span>
+        </button>
+      </form>
+    </section>
+
+    <!-- RESULTS SECTION (hidden until prediction) -->
+    <section id="results-section" class="glass-card" hidden>
+      <h2>
+        <span class="section-icon">🎯</span>
+        Prediction Results
+      </h2>
+
+      <!-- AQI Gauge -->
+      <div id="aqi-gauge-container">
+        <div id="aqi-gauge">
+          <svg viewBox="0 0 200 120" id="gauge-svg">
+            <defs>
+              <linearGradient id="gauge-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" style="stop-color:#4caf50" />
+                <stop offset="20%" style="stop-color:#ff9800" />
+                <stop offset="40%" style="stop-color:#ff5722" />
+                <stop offset="60%" style="stop-color:#e91e63" />
+                <stop offset="80%" style="stop-color:#9c27b0" />
+                <stop offset="100%" style="stop-color:#b71c1c" />
+              </linearGradient>
+            </defs>
+            <!-- Background arc -->
+            <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="12"
+              stroke-linecap="round" />
+            <!-- Colored arc -->
+            <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="url(#gauge-gradient)" stroke-width="12"
+              stroke-linecap="round" opacity="0.6" />
+            <!-- Needle -->
+            <line id="gauge-needle" x1="100" y1="100" x2="100" y2="28" stroke="#fff" stroke-width="2.5"
+              stroke-linecap="round" transform="rotate(-90, 100, 100)" />
+            <circle cx="100" cy="100" r="5" fill="#fff" />
+          </svg>
+          <div id="aqi-value">--</div>
+          <div id="aqi-category">--</div>
+        </div>
+      </div>
+
+      <!-- Health Advice -->
+      <div id="advice-container">
+        <h3>
+          <span class="section-icon">💡</span>
+          Health Advisory
+        </h3>
+        <div id="advice-content"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer id="app-footer">
+    <p>Powered by <strong>Random Forest ML</strong> &amp; <strong>Gemini AI</strong> · Built with FastAPI</p>
+  </footer>
+
+  <script src="/static/script.js"></script>
+</body>
+
+</html>
